@@ -113,35 +113,78 @@
     ];
 
     var currencies = [
-        { title: 'KOW' },
-        { title: 'AUD' },
-        { title: 'USD' },
-        { title: 'EUR' },
-        { title: 'GBP' },
-        { title: 'THB' },
-        { title: 'TWD' },
-        { title: 'SAR' }
+        {
+            value: 'KOW',
+            name: 'KOW'
+        },
+        {
+            value: 'AUD',
+            name: 'AUD'
+        },
+        {
+            value: 'USD',
+            name: 'USD'
+        },
+        {
+            value: 'EUR',
+            name: 'EUR'
+        },
+        {
+            value: 'GBP',
+            name: 'GBP'
+        },
+        {
+            value: 'THB',
+            name: 'THB'
+        },
+        {
+            value: 'TWD',
+            name: 'TWD'
+        },
+        {
+            value: 'SAR',
+            name: 'SAR'
+        }
     ];
 
-    var PaymentProfiles = [
-        { title: 'Influencer – PayPal' },
-        { title: 'Influencer-    Non-PayPal' },
-        { title: 'Wire to USA – SWIFT code' },
-        { title: 'Wire to Australia – BSB\\Account' },
-        { title: 'Other' }
+    var paymentProfiles = [
+        {
+            vale: '0',
+            name: 'Influencer – PayPal'
+        },
+        {
+            vale: '1',
+            name: 'Influencer-    Non-PayPal'
+        },
+        {
+            vale: '2',
+            name: 'Wire to USA – SWIFT code'
+        },
+        {
+            vale: '3',
+            name: 'Wire to Australia – BSB\\Account'
+        },
+        {
+            vale: '4',
+            name: 'Other'
+        }
     ];
 
 
     $('.ui.styled.accordion').accordion();
     $('.ui.checkbox').checkbox();
-    $('.ui.dropdown').dropdown();
+
     $('.ui.calendar.date').calendar({
         type: 'date'
+    });
+    $('#currency-units-dropdown').dropdown();
+    $('#payment-profile-dropdown').dropdown({
+        values: paymentProfiles
     });
     $('#allocation-period-input').daterangepicker();
 
     $('#vendor-search').search({
-        source: vendors
+        source: $.merge(vendors, influencers)
     });
 
     $('#market-search').search({
@@ -152,6 +195,50 @@
         popup : $('.custom.popup'),
         inline: true,
         on    : 'click'
+    });
+
+    $('#preview-btn').on("click", function(){
+        var result = {
+            "vendor": $('#vendor-input').val(),
+            "amount": $('#amount-input').val(),
+            "currency": $('#currency-unit').text(),
+            "invoice": $('#invoice-input').val(),
+            "date": $('#invoice-date-input').val(),
+            "invoice_reference": $('#invoice-reference-input').val(),
+            "due_date": $('#payment-due-input').val(),
+            "allocation": $('input[name="allocation-method"]:checked').val(),
+            "market": $('#market-search-input').val(),
+            "allocation_period": $('#allocation-period-input').val()
+        };
+        alert(JSON.stringify(result));
+    });
+
+    $('#payee-add-btn').on("click", function(){
+        var data = {
+            "name": $('#payee-name').val(),
+            "address": $('#payee-address').val(),
+            "detail": $('#payment-details').val(),
+            "category": $('#payment-category').text()
+        };
+
+        if (data.name == ""){
+            $('#payee-name').focus();
+            return false;
+        }
+        if (data.category == "Payment Profile"){
+            $('#payment-category').click();
+            return false;
+        }
+
+        if (data.category.indexOf("influencer") > -1){
+            $.merge(influencers, [{title: data.name}]);
+        } else {
+            $.merge(vendors, [{title: data.name}]);
+        }
+        $('#vendor-search').search({
+            source: $.merge(vendors, influencers)
+        });
+        $('body').click();
     });
     //$('#date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
 })();

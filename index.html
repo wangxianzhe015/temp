@@ -31,7 +31,7 @@
                         <div class="six wide column">
                             <div class="ui search" id="vendor-search">
                                 <div class="ui icon input">
-                                    <input class="prompt rounded" type="text" placeholder="Pay whom?">
+                                    <input id="vendor-input" class="prompt rounded" type="text" placeholder="Pay whom?">
                                     <i class="search icon"></i>
                                 </div>
                                 <div class="results"></div>
@@ -44,10 +44,10 @@
                         </div>
                         <div class="six wide column">
                             <div class="ui right labeled input">
-                                <input type="text">
+                                <input type="text" id="amount-input" />
                                 <div class="ui basic label">.00</div>
-                                <div class="ui dropdown label">
-                                    <div class="text">KOW</div>
+                                <div class="ui dropdown label" id="currency-units-dropdown">
+                                    <div class="text" id="currency-unit">KOW</div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
                                         <div class="item">KOW</div>
@@ -65,14 +65,14 @@
                     </div>
                     <div class="ui grid">
                         <div class="six wide column">
-                            <input class="rounded" type="text" placeholder="Acc#">
+                            <input class="rounded" id="invoice-input" type="text" placeholder="Acc#">
                         </div>
                         <div class="two wide column"></div>
                         <div class="six wide column">
                             <div class="ui calendar date" id="invoice-date">
                                 <div class="ui input right icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Invoice Date">
+                                    <input type="text" id="invoice-date-input" placeholder="Invoice Date">
                                 </div>
                             </div>
                         </div>
@@ -80,14 +80,14 @@
                     </div>
                     <div class="ui grid">
                         <div class="six wide column">
-                            <input class="rounded" type="text" placeholder="Invoice Reference">
+                            <input class="rounded" id="invoice-reference-input" type="text" placeholder="Invoice Reference">
                         </div>
                         <div class="two wide column"></div>
                         <div class="six wide column">
                             <div class="ui calendar date" id="payment-due">
                                 <div class="ui input right icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Payment Due">
+                                    <input type="text" id="payment-due-input" placeholder="Payment Due">
                                 </div>
                             </div>
                         </div>
@@ -106,37 +106,37 @@
                     <div class="inline fields">
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="frequency" checked="checked">
+                                <input type="radio" name="allocation-method" value="influencers" checked="checked">
                                 <label>Influencers</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="frequency">
+                                <input type="radio" name="allocation-method" value="app-installs">
                                 <label>App Installs</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="frequency">
+                                <input type="radio" name="allocation-method" value="ppc">
                                 <label>PPC</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="frequency">
+                                <input type="radio" name="allocation-method" value="other">
                                 <label>Other</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="frequency">
+                                <input type="radio" name="allocation-method" value="digital-production">
                                 <label>Digital Production</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="frequency">
+                                <input type="radio" name="allocation-method" value="digital-marketing">
                                 <label>Digital Marketing</label>
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                     <div class="inline fields">
                         <div class="ui search" id="market-search">
                             <div class="ui icon input">
-                                <input class="prompt rounded" type="text" placeholder="Market">
+                                <input class="prompt rounded" id="market-search-input" type="text" placeholder="Market">
                                 <i class="search icon"></i>
                             </div>
                             <div class="results"></div>
@@ -222,8 +222,8 @@
             </div>
         </div>
         <div class="field">
-            <div class="ui secondary submit button">Submit</div>
-            <div class="ui secondary submit button">Preview</div>
+            <div class="ui secondary submit button" id="submit-btn">Submit</div>
+            <div class="ui secondary submit button" id="preview-btn">Preview</div>
         </div>
     </div>
     <div class="ui fluid custom popup left top" style="min-width: 400px;height: 300px;">
@@ -232,17 +232,17 @@
                 <div class="ui form">
                     <div class="field">
                         <div class="ui input transparent">
-                            <input type="text" placeholder="Payee Name..."/>
+                            <input type="text" id="payee-name" placeholder="Payee Name..."/>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui input transparent">
-                            <input type="text" placeholder="Payee Address..."/>
+                            <input type="text" id="payee-address" placeholder="Payee Address..."/>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui input transparent">
-                            <input type="text" placeholder="Payment Details..."/>
+                            <input type="text" id="payment-details" placeholder="Payment Details..."/>
                         </div>
                     </div>
                 </div>
@@ -250,10 +250,10 @@
             <div class="eight wide grid"></div>
         </div>
         <div style="position: absolute;bottom: 10px;right: 10px;">
-            <i class="checkmark box icon" style="font-size: 2em;vertical-align: bottom;color:#555;"></i>
-            <div class="ui selection dropdown">
-                <input name="gender" type="hidden">
-                <div class="default text">Payment Profile</div>
+            <i class="checkmark box icon" id="payee-add-btn"></i>
+            <div class="ui selection dropdown" id="payment-profile-dropdown">
+                <input id="payment-profile-input" type="hidden">
+                <div class="default text" id="payment-category">Payment Profile</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <div class="item" data-value="0">Influencer – PayPal</div>
