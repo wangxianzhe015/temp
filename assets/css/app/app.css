@@ -1,3 +1,6 @@
+.container{
+    padding: 1em 0;
+}
 .ui.form input[type='text']{
     min-width: 300px;
 }
