@@ -1,20 +1,270 @@
-﻿<!-- Author: www.mahdi7s.com -->
-
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Simple Angry Birds</title>
-        <script type="text/javascript" src="cocos2d.js" ></script>
-        <style type="text/css">
-            * {
-                margin:0;
-                padding:0;
-            }
-        </style>
-    </head> 
-    <body>
-        <canvas id="viewport" width="1200px" height="600px" >
-            <h2 style="text-align:center">Use a better browser !</h2>
-        </canvas>
-    </body>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <link rel="stylesheet" href="assets/css/lib/semantic.min.css">
+    <link rel="stylesheet" href="assets/css/lib/calendar.min.css">
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />-->
+
+    <!--<link rel="stylesheet"-->
+          <!--href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.min.css"/>-->
+    <!--<link rel="stylesheet"-->
+          <!--href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css"/>-->
+
+    <!--<link rel="stylesheet" href="assets/css/lib/bootstrap-material-datetimepicker.css" />-->
+    <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+    <link rel="stylesheet" href="assets/css/app/app.css">
+</head>
+<body>
+<div class="ui container">
+    <div class="ui styled fluid accordion">
+        <div class="active title">
+            <i class="dropdown icon"></i>
+            Whom to Pay
+        </div>
+        <div class="active content">
+            <div class="ui segment">
+                <div class="ui fluid form">
+                    <div class="ui grid">
+                        <div class="six wide column">
+                            <div class="ui search" id="vendor-search">
+                                <div class="ui icon input">
+                                    <input class="prompt rounded" type="text" placeholder="Pay whom?">
+                                    <i class="search icon"></i>
+                                </div>
+                                <div class="results"></div>
+                            </div>
+                        </div>
+                        <div class="two wide column">
+                            <button class="ui icon button" id="popup-btn">
+                                <i class="add square icon"></i>
+                            </button>
+                        </div>
+                        <div class="six wide column">
+                            <div class="ui right labeled input">
+                                <input type="text">
+                                <div class="ui basic label">.00</div>
+                                <div class="ui dropdown label">
+                                    <div class="text">KOW</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <div class="item">KOW</div>
+                                        <div class="item">AUD</div>
+                                        <div class="item">USD</div>
+                                        <div class="item">EUR</div>
+                                        <div class="item">GBP</div>
+                                        <div class="item">THB</div>
+                                        <div class="item">TWD</div>
+                                        <div class="item">SAR</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid">
+                        <div class="six wide column">
+                            <input class="rounded" type="text" placeholder="Acc#">
+                        </div>
+                        <div class="two wide column"></div>
+                        <div class="six wide column">
+                            <div class="ui calendar date" id="invoice-date">
+                                <div class="ui input right icon">
+                                    <i class="calendar icon"></i>
+                                    <input type="text" placeholder="Invoice Date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two wide column"></div>
+                    </div>
+                    <div class="ui grid">
+                        <div class="six wide column">
+                            <input class="rounded" type="text" placeholder="Invoice Reference">
+                        </div>
+                        <div class="two wide column"></div>
+                        <div class="six wide column">
+                            <div class="ui calendar date" id="payment-due">
+                                <div class="ui input right icon">
+                                    <i class="calendar icon"></i>
+                                    <input type="text" placeholder="Payment Due">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two wide column"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="title">
+            <i class="dropdown icon"></i>
+            How to Allocate
+        </div>
+        <div class="content">
+            <div class="ui segment">
+                <div class="ui fluid form">
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="frequency" checked="checked">
+                                <label>Influencers</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="frequency">
+                                <label>App Installs</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="frequency">
+                                <label>PPC</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="frequency">
+                                <label>Other</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="frequency">
+                                <label>Digital Production</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="frequency">
+                                <label>Digital Marketing</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inline fields">
+                        <div class="ui search" id="market-search">
+                            <div class="ui icon input">
+                                <input class="prompt rounded" type="text" placeholder="Pay whom?">
+                                <i class="search icon"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div>
+                    <div class="inline fields">
+                        <div class="ui calendar period" id="allocation-period">
+                            <div class="ui input right icon">
+                                <i class="calendar icon"></i>
+                                <input type="text" placeholder="Invoice Date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="title">
+            <i class="dropdown icon"></i>
+            Advanced Allocations
+        </div>
+        <div class="content">
+            <div class="ui segment">
+                <div class="ui fluid form">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>First Name</label>
+                            <input placeholder="First Name" type="text">
+                        </div>
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input placeholder="Last Name" type="text">
+                        </div>
+                    </div>
+                    <div class="ui accordion field">
+                        <div class="title">
+                            <i class="icon dropdown"></i>
+                            Optional Details
+                        </div>
+                        <div class="content field">
+                            <label class="transition hidden">Maiden Name</label>
+                            <input placeholder="Maiden Name" type="text" class="transition hidden">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="title">
+            <i class="dropdown icon"></i>
+            Upload Invoice
+        </div>
+        <div class="content">
+            <div class="ui form">
+                <div class="field">
+                    <div class="ui green submit button">Upload</div>
+                </div>
+                <div class="field">
+                    <label>Comment</label>
+                    <textarea rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui form">
+        <div class="field">
+            <div class="ui checkbox">
+                <input type="checkbox" name="example">
+                <label>I agree to Terms and Conditions</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="ui secondary submit button">Submit</div>
+            <div class="ui secondary submit button">Preview</div>
+        </div>
+    </div>
+    <div class="ui fluid custom popup left top" style="min-width: 400px;height: 300px;">
+        <div class="ui grid">
+            <div class="eight wide column">
+                <div class="ui form">
+                    <div class="field">
+                        <div class="ui input transparent">
+                            <input type="text" placeholder="Payee Name..."/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui input transparent">
+                            <input type="text" placeholder="Payee Address..."/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui input transparent">
+                            <input type="text" placeholder="Payment Details..."/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="eight wide grid"></div>
+        </div>
+        <div style="position: absolute;bottom: 10px;right: 10px;">
+            <i class="checkmark box icon" style="font-size: 2em;vertical-align: bottom;color:#555;"></i>
+            <div class="ui selection dropdown">
+                <input name="gender" type="hidden">
+                <div class="default text">Payment Profile</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" data-value="0">Value</div>
+                    <div class="item" data-value="1">Another Value</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="assets/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/lib/semantic.min.js"></script>
+<script type="text/javascript" src="assets/js/lib/calendar.min.js"></script>
+<!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>-->
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/ripples.min.js"></script>-->
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/material.min.js"></script>-->
+<!--<script type="text/javascript" src="//momentjs.com/downloads/moment-with-locales.min.js"></script>-->
+<!--<script type="text/javascript" src="assets/js/lib/bootstrap-material-datetimepicker.js"></script>-->
+<script type="text/javascript" src="assets/js/app/app.js"></script>
+</body>
 </html>

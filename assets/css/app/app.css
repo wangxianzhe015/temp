@@ -1,0 +1,16 @@
+.ui.input{
+    width: 100%;
+}
+.ui.search > .results .result .content{
+    padding: 0;
+}
+.ui.search > .results .result .title {
+    border: none;
+}
+.ui.form input.rounded, .ui.form input.rounded:focus {
+    border-radius: 500rem;
+}
+.ui.custom.popup{
+    width: 600px;
+    height: 400px;
+}
