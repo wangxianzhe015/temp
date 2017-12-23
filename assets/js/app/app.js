@@ -138,9 +138,7 @@
     $('.ui.calendar.date').calendar({
         type: 'date'
     });
-    $('.ui.calendar.period').calendar({
-
-    });
+    $('#allocation-period-input').daterangepicker();
 
     $('#vendor-search').search({
         source: vendors

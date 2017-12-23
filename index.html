@@ -5,6 +5,7 @@
     <title>Form</title>
     <link rel="stylesheet" href="assets/css/lib/semantic.min.css">
     <link rel="stylesheet" href="assets/css/lib/calendar.min.css">
+    <link rel="stylesheet" href="assets/css/lib/daterangepicker.min.css">
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />-->
 
     <!--<link rel="stylesheet"-->
@@ -143,18 +144,24 @@
                     <div class="inline fields">
                         <div class="ui search" id="market-search">
                             <div class="ui icon input">
-                                <input class="prompt rounded" type="text" placeholder="Pay whom?">
+                                <input class="prompt rounded" type="text" placeholder="Market">
                                 <i class="search icon"></i>
                             </div>
                             <div class="results"></div>
                         </div>
                     </div>
                     <div class="inline fields">
-                        <div class="ui calendar period" id="allocation-period">
+                        <div class="ui period">
                             <div class="ui input right icon">
                                 <i class="calendar icon"></i>
-                                <input type="text" placeholder="Invoice Date">
+                                <input type="text" id="allocation-period-input" placeholder="Allocation Period" />
                             </div>
+                        </div>
+                    </div>
+                    <div class="inline fields">
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="example"/>
+                            <label>I need more complex Allocation options</label>
                         </div>
                     </div>
                 </div>
@@ -249,8 +256,11 @@
                 <div class="default text">Payment Profile</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <div class="item" data-value="0">Value</div>
-                    <div class="item" data-value="1">Another Value</div>
+                    <div class="item" data-value="0">Influencer – PayPal</div>
+                    <div class="item" data-value="1">Influencer- Non-PayPal</div>
+                    <div class="item" data-value="2">Wire to USA – SWIFT code</div>
+                    <div class="item" data-value="3">Wire to Australia – BSB\Account</div>
+                    <div class="item" data-value="4">Other</div>
                 </div>
             </div>
         </div>
@@ -259,6 +269,8 @@
 
 <script type="text/javascript" src="assets/js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="assets/js/lib/semantic.min.js"></script>
+<script type="text/javascript" src="assets/js/lib/moment.min.js"></script>
+<script type="text/javascript" src="assets/js/lib/daterangepicker.min.js"></script>
 <script type="text/javascript" src="assets/js/lib/calendar.min.js"></script>
 <!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>-->
 <!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/ripples.min.js"></script>-->
