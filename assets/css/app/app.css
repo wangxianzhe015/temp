@@ -2,7 +2,7 @@
     padding: 1em 0;
 }
 .ui.form input[type='text']{
-    min-width: 300px;
+    min-width: 250px;
 }
 .ui.input{
     width: 100%;
@@ -25,4 +25,11 @@
     vertical-align: bottom;
     color:#555;
     cursor: pointer;
+}
+input#amount-input{
+    min-width: 0;
+    width: calc(100% - 75px);
+}
+#file-input{
+    display: none;
 }

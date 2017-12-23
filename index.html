@@ -28,7 +28,7 @@
             <div class="ui segment">
                 <div class="ui fluid form">
                     <div class="ui grid">
-                        <div class="six wide column">
+                        <div class="four wide column">
                             <div class="ui search" id="vendor-search">
                                 <div class="ui icon input">
                                     <input id="vendor-input" class="prompt rounded" type="text" placeholder="Pay whom?">
@@ -37,15 +37,13 @@
                                 <div class="results"></div>
                             </div>
                         </div>
-                        <div class="two wide column">
+                        <div class="four wide column">
                             <button class="ui icon button" id="popup-btn">
                                 <i class="add square icon"></i>
                             </button>
                         </div>
-                        <div class="six wide column">
+                        <div class="four wide column">
                             <div class="ui right labeled input">
-                                <input type="text" id="amount-input" />
-                                <div class="ui basic label">.00</div>
                                 <div class="ui dropdown label" id="currency-units-dropdown">
                                     <div class="text" id="currency-unit">KOW</div>
                                     <i class="dropdown icon"></i>
@@ -60,15 +58,17 @@
                                         <div class="item">SAR</div>
                                     </div>
                                 </div>
+                                <input type="text" id="amount-input" />
+                                <div class="ui basic label">.00</div>
                             </div>
                         </div>
                     </div>
                     <div class="ui grid">
-                        <div class="six wide column">
+                        <div class="four wide column">
                             <input class="rounded" id="invoice-input" type="text" placeholder="Acc#">
                         </div>
-                        <div class="two wide column"></div>
-                        <div class="six wide column">
+                        <div class="four wide column"></div>
+                        <div class="four wide column">
                             <div class="ui calendar date" id="invoice-date">
                                 <div class="ui input right icon">
                                     <i class="calendar icon"></i>
@@ -76,14 +76,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="two wide column"></div>
+                        <div class="four wide column"></div>
                     </div>
                     <div class="ui grid">
-                        <div class="six wide column">
+                        <div class="four wide column">
                             <input class="rounded" id="invoice-reference-input" type="text" placeholder="Invoice Reference">
                         </div>
-                        <div class="two wide column"></div>
-                        <div class="six wide column">
+                        <div class="four wide column"></div>
+                        <div class="four wide column">
                             <div class="ui calendar date" id="payment-due">
                                 <div class="ui input right icon">
                                     <i class="calendar icon"></i>
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="two wide column"></div>
+                        <div class="four wide column"></div>
                     </div>
                 </div>
             </div>
@@ -204,7 +204,8 @@
         <div class="content">
             <div class="ui form">
                 <div class="field">
-                    <div class="ui green submit button">Upload</div>
+                    <div class="ui green submit button" id="upload-btn">Upload</div>
+                    <input type="file" id="file-input"/>
                 </div>
                 <div class="field">
                     <label>Comment</label>

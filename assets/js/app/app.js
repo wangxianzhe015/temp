@@ -240,5 +240,9 @@
         });
         $('body').click();
     });
+
+    $('#upload-btn').on("click", function(){
+        $('#file-input').click();
+    });
     //$('#date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
 })();
