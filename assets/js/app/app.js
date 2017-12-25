@@ -139,47 +139,47 @@
         $('.currency-unit').text($(this).parent().find('.currency-unit').text());
     });
 
-    var allocation_row = '<div class="ui grid allocation-row">' +
-        '<div class="four wide column">' +
-        '<div class="ui search market-search">' +
-        '<div class="ui icon input">' +
-        '<input class="prompt rounded complex-market-search-input" type="text" placeholder="Market">' +
-        '<i class="search icon"></i>' +
-        '</div>' +
-        '<div class="results"></div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="four wide column">' +
-        '<div class="ui period">' +
-        '<div class="ui input right icon">' +
-        '<i class="calendar icon"></i>' +
-        '<input type="text" class="allocation-period-input" placeholder="Allocation Period" />' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="four wide column">' +
-        '<div class="ui right labeled input">' +
-        '<div class="ui dropdown label allocation-currency-units-dropdown">' +
-        '<div class="text currency-unit">' +
-        $("#allocation-currency-unit").text() +
-        '</div>' +
-        '<i class="dropdown icon"></i>' +
-        '<div class="menu">' +
-        '</div>' +
-        '</div>' +
-        '<input type="text" class="one-allocation-amount" />' +
-        '<div class="ui basic label">.00</div>' +
-        '</div>' +
-        '</div>' +
-        '<div class="four wide column text-center">' +
-        '<div class="ui icon button add-row-btn">' +
-        '<i class="icon add square"></i>' +
-        '</div>' +
-        '</div>' +
-        '</div>';
-
     $('#complex-allocation-panel').delegate(".add-row-btn", "click", function(){
         if ($('.allocation-row').length >= 5) return false;
+
+        var allocation_row = '<div class="ui grid allocation-row">' +
+            '<div class="four wide column">' +
+            '<div class="ui search market-search">' +
+            '<div class="ui icon input">' +
+            '<input class="prompt rounded complex-market-search-input" type="text" placeholder="Market">' +
+            '<i class="search icon"></i>' +
+            '</div>' +
+            '<div class="results"></div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="four wide column">' +
+            '<div class="ui period">' +
+            '<div class="ui input right icon">' +
+            '<i class="calendar icon"></i>' +
+            '<input type="text" class="allocation-period-input" placeholder="Allocation Period" />' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="four wide column">' +
+            '<div class="ui right labeled input">' +
+            '<div class="ui dropdown label allocation-currency-units-dropdown">' +
+            '<div class="text currency-unit">' +
+            $("#allocation-currency-unit").text() +
+            '</div>' +
+            '<i class="dropdown icon"></i>' +
+            '<div class="menu">' +
+            '</div>' +
+            '</div>' +
+            '<input type="text" class="one-allocation-amount" />' +
+            '<div class="ui basic label">.00</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="four wide column text-center">' +
+            '<div class="ui icon button add-row-btn">' +
+            '<i class="icon add square"></i>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
 
         $(allocation_row).insertAfter($(this).parents('.allocation-row'));
 
