@@ -2,200 +2,62 @@
  * Created by Steel on 12/21/2017.
  */
 ;(function(){
-    var vendors = [
-        { title: 'Google Australia' },
-        { title: 'Google DoubleClick' },
-        { title: 'Bing Ads' },
-        { title: 'Twitter' },
-        { title: 'FaceBook' },
-        { title: '---' },
-        { title: 'Yedioth Internt' },
-        { title: 'Chieh-Heng Wu' },
-        { title: 'CJ E&M Hong Kong Limited' },
-        { title: 'Cyber Agent, Inc' },
-        { title: 'Pulse - 0817P534-1/0817P534-2' },
-        { title: 'SnapChat - 16598' },
-        { title: 'SnapChat' },
-        { title: 'Tune Inc - 01309940' },
-        { title: 'Bruce Griffiths' },
-        { title: 'Global Erasmus' },
-        { title: 'AHA Brand Agency' },
-        { title: 'Orion - 7 Eleven' },
-        { title: 'Joker' },
-        { title: 'Parnas Hotel' },
-        { title: 'Shila Stay Co.,LTD' },
-        { title: 'CHEN JINFU' },
-        { title: 'HUNG YU PING PINKY' },
-        { title: 'Travelholic' },
-        { title: 'Localytics' },
-        { title: 'AdSupply Inc' },
-        { title: 'Appfigures' },
-        { title: 'Adphorus' },
-        { title: 'Kong King Consulting' },
-        { title: 'YNET' },
-        { title: 'Joker' },
-        { title: 'Invisible Studios Pte Ltd' },
-        { title: 'Event winners (post fee)' },
-        { title: 'Snapchat - 17362' },
-        { title: 'Meethk' },
-        { title: 'CJ E&M Hong Kong Limited - 201610414003 &201610414003' },
-        { title: 'Dulceida' },
-        { title: 'Sumwell' }
-    ];
+    var vendors, categories, markets, influencers, currencies, paymentProfiles;
 
-    var categories = [
-        { title: 'Digital Advertising' },
-        { title: 'Influencers' },
-        { title: 'Mobile App Installs' },
-        { title: 'Digital Production' },
-        { title: 'PPC Brand' },
-        { title: 'OTHER Brand Marketing' },
-        { title: 'PR' }
-    ];
-
-    var markets = [
-        { title: 'South Korea' },
-        { title: '--' },
-        { title: 'Hong Kong' },
-        { title: 'Malaysia' },
-        { title: 'Thailand' },
-        { title: 'Singapore' },
-        { title: 'Taiwan' },
-        { title: 'Japan' },
-        { title: '--' },
-        { title: 'MENA' },
-        { title: 'Saudi Arabia' },
-        { title: 'Kuwait' },
-        { title: '--' },
-        { title: 'United Kingdom' },
-        { title: 'Ireland' },
-        { title: 'Spain' },
-        { title: 'Italy' },
-        { title: '--' },
-        { title: 'New Zealand' },
-        { title: 'Australia' },
-        { title: 'Russia' },
-        { title: 'Israel' },
-        { title: '--' },
-        { title: 'OTHER' }
-    ];
-
-    var influencers = [
-        { title: 'Marta Riumbau' },
-        { title: 'jbackpacktravel' },
-        { title: 'Laura Escanes' },
-        { title: 'Aida Domenech' },
-        { title: 'Pantip' },
-        { title: 'Lee, Chien-Hong' },
-        { title: 'Yau Siu Hang' },
-        { title: 'WONG YIN YI' },
-        { title: 'POON WAI NANG' },
-        { title: 'finance@volo.mobi' },
-        { title: 'Su, Pin-Hwa' },
-        { title: 'Marina Sato' },
-        { title: 'Saad El Din Abdul Moula - HC17' },
-        { title: '4 Top Influencers online video' },
-        { title: 'Mylifemytravel' },
-        { title: 'atravelblog' },
-        { title: '1000 miles' },
-        { title: 'Night Owl Cinematics' },
-        { title: 'Hotel Mela' },
-        { title: 'Romizunaidi Bin Roslan' },
-        { title: 'ibreak2travel' },
-        { title: 'Fraser Residence' },
-        { title: 'Trippiece Inc' },
-        { title: 'Nurul Huda Mukhtar - paypal' },
-        { title: 'Zepo Silup Co Ltd' },
-        { title: 'Yunting Chen' },
-        { title: 'Wan-Ping Yu' },
-        { title: 'Design 210' },
-        { title: 'Urbanfly Limited' }
-    ];
-
-    var currencies = [
-        {
-            value: 'KOW',
-            name: 'KOW'
-        },
-        {
-            value: 'AUD',
-            name: 'AUD'
-        },
-        {
-            value: 'USD',
-            name: 'USD'
-        },
-        {
-            value: 'EUR',
-            name: 'EUR'
-        },
-        {
-            value: 'GBP',
-            name: 'GBP'
-        },
-        {
-            value: 'THB',
-            name: 'THB'
-        },
-        {
-            value: 'TWD',
-            name: 'TWD'
-        },
-        {
-            value: 'SAR',
-            name: 'SAR'
+    var dateRangePickerOption = {
+        format: 'YYYY-MM-DD',
+        "ranges": {
+            "This Month": [moment().startOf('month'), moment().endOf('month')],
+            "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            "Next Month": [moment().add(1, 'month').startOf('month'), moment().add(1, 'month').endOf('month')]
         }
-    ];
+    };
+//////////////////////////////////////////////////////// Semantic Modules /////////////////////////////////////////
 
-    var paymentProfiles = [
-        {
-            vale: '0',
-            name: 'Influencer – PayPal'
-        },
-        {
-            vale: '1',
-            name: 'Influencer-    Non-PayPal'
-        },
-        {
-            vale: '2',
-            name: 'Wire to USA – SWIFT code'
-        },
-        {
-            vale: '3',
-            name: 'Wire to Australia – BSB\\Account'
-        },
-        {
-            vale: '4',
-            name: 'Other'
-        }
-    ];
+    $.getJSON("data/vendors.json").done(function(data){
+        vendors = data;
+        $.getJSON("data/influencers.json").done(function(data){
+            influencers = data;
+            $('#vendor-search').search({
+                source: $.merge(vendors, influencers)
+            });
+        })
+    });
 
+    $.getJSON("data/markets.json").done(function(data){
+        markets = data;
+        $('.market-search').search({
+            source: markets
+        });
+    });
+
+    $.getJSON("data/payment_profiles.json").done(function(data){
+        paymentProfiles = data;
+        $('#payment-profile-dropdown').dropdown({
+            values: paymentProfiles
+        });
+    });
 
     $('.ui.styled.accordion').accordion();
+
     $('.ui.checkbox').checkbox();
 
     $('.ui.calendar.date').calendar({
         type: 'date'
-    });
+    }).popup();
+
     $('#currency-units-dropdown').dropdown();
-    $('#payment-profile-dropdown').dropdown({
-        values: paymentProfiles
-    });
-    $('#allocation-period-input').daterangepicker();
+    $('#allocation-currency-units-dropdown').dropdown();
 
-    $('#vendor-search').search({
-        source: $.merge(vendors, influencers)
-    });
-
-    $('#market-search').search({
-        source: markets
-    });
+    $('.allocation-period-input').daterangepicker(dateRangePickerOption);
 
     $('#popup-btn').popup({
         popup : $('.custom.popup'),
         inline: true,
         on    : 'click'
     });
+
+//////////////////////////////////////////////////// Event Handlers /////////////////////////////////////////////
 
     $('#preview-btn').on("click", function(){
         var result = {
@@ -232,8 +94,24 @@
 
         if (data.category.indexOf("influencer") > -1){
             $.merge(influencers, [{title: data.name}]);
+            $.ajax({
+                url: "action.php",
+                type: "POST",
+                data: {
+                    "action": "add-influencer",
+                    "data": {"title": data.name}
+                }
+            });
         } else {
             $.merge(vendors, [{title: data.name}]);
+            $.ajax({
+                url: "action.php",
+                type: "POST",
+                data: {
+                    "action": "add-vendor",
+                    "data": {"title": data.name}
+                }
+            });
         }
         $('#vendor-search').search({
             source: $.merge(vendors, influencers)
@@ -241,8 +119,93 @@
         $('body').click();
     });
 
+    $('#amount-input').on("change", validateAllocationAmount);
+
     $('#upload-btn').on("click", function(){
         $('#file-input').click();
     });
+
+    $('#simple-allocation-check').on("change", function(){
+        if ($(this).prop("checked")){
+            $("#simple-allocation-panel").hide();
+            $("#complex-allocation-panel").show();
+        } else {
+            $("#simple-allocation-panel").show();
+            $("#complex-allocation-panel").hide();
+        }
+    });
+
+    $('.currency-unit-menu').on("click", function(){
+        $('.currency-unit').text($(this).parent().find('.currency-unit').text());
+    });
+
+    var allocation_row = '<div class="ui grid allocation-row">' +
+        '<div class="four wide column">' +
+        '<div class="ui search market-search">' +
+        '<div class="ui icon input">' +
+        '<input class="prompt rounded complex-market-search-input" type="text" placeholder="Market">' +
+        '<i class="search icon"></i>' +
+        '</div>' +
+        '<div class="results"></div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="four wide column">' +
+        '<div class="ui period">' +
+        '<div class="ui input right icon">' +
+        '<i class="calendar icon"></i>' +
+        '<input type="text" class="allocation-period-input" placeholder="Allocation Period" />' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="four wide column">' +
+        '<div class="ui right labeled input">' +
+        '<div class="ui dropdown label allocation-currency-units-dropdown">' +
+        '<div class="text currency-unit">' +
+        $("#allocation-currency-unit").text() +
+        '</div>' +
+        '<i class="dropdown icon"></i>' +
+        '<div class="menu">' +
+        '</div>' +
+        '</div>' +
+        '<input type="text" class="one-allocation-amount" />' +
+        '<div class="ui basic label">.00</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="four wide column text-center">' +
+        '<div class="ui icon button add-row-btn">' +
+        '<i class="icon add square"></i>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+    $('#complex-allocation-panel').delegate(".add-row-btn", "click", function(){
+        if ($('.allocation-row').length >= 5) return false;
+
+        $(allocation_row).insertAfter($(this).parents('.allocation-row'));
+
+        $('.market-search').search({
+            source: markets
+        });
+
+        $('.allocation-period-input').daterangepicker(dateRangePickerOption);
+
+    }).delegate(".one-allocation-amount", "keyup", validateAllocationAmount).delegate("#total-allocation-amount", "keyup", validateAllocationAmount);
     //$('#date').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
 })();
+
+function validateAllocationAmount(){
+    var $totalObj = $('#total-allocation-amount'), items = $('.one-allocation-amount'), sum = 0;
+
+    $.each(items, function(i, el){
+        sum += +$(el).val();
+    });
+
+    $totalObj.val(sum);
+    if ($("#amount-input").val() == sum){
+        $totalObj.parent().removeClass("error");
+        $("#allocation-confirm-btn").show();
+    } else {
+        $totalObj.parent().addClass("error");
+        $("#allocation-confirm-btn").hide();
+    }
+}

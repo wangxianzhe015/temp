@@ -1,3 +1,12 @@
+.font-helvetica{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.text-right{
+    text-align: right;
+}
+.text-center{
+    text-align: center;
+}
 .container{
     padding: 1em 0;
 }
@@ -32,4 +41,14 @@ input#amount-input{
 }
 #file-input{
     display: none;
+}
+#complex-allocation-panel{
+    display: none;
+}
+#total-value-panel #allocation-confirm-btn{
+    display: none;
+    cursor: pointer;
+}
+#total-value-panel #allocation-confirm-btn:before{
+    vertical-align: -webkit-baseline-middle;
 }

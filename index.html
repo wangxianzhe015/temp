@@ -6,15 +6,6 @@
     <link rel="stylesheet" href="assets/css/lib/semantic.min.css">
     <link rel="stylesheet" href="assets/css/lib/calendar.min.css">
     <link rel="stylesheet" href="assets/css/lib/daterangepicker.min.css">
-    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />-->
-
-    <!--<link rel="stylesheet"-->
-          <!--href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.min.css"/>-->
-    <!--<link rel="stylesheet"-->
-          <!--href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css"/>-->
-
-    <!--<link rel="stylesheet" href="assets/css/lib/bootstrap-material-datetimepicker.css" />-->
-    <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
     <link rel="stylesheet" href="assets/css/app/app.css">
 </head>
 <body>
@@ -45,9 +36,9 @@
                         <div class="four wide column">
                             <div class="ui right labeled input">
                                 <div class="ui dropdown label" id="currency-units-dropdown">
-                                    <div class="text" id="currency-unit">KOW</div>
+                                    <div class="text currency-unit" id="currency-unit">KOW</div>
                                     <i class="dropdown icon"></i>
-                                    <div class="menu">
+                                    <div class="menu currency-unit-menu">
                                         <div class="item">KOW</div>
                                         <div class="item">AUD</div>
                                         <div class="item">USD</div>
@@ -69,7 +60,7 @@
                         </div>
                         <div class="four wide column"></div>
                         <div class="four wide column">
-                            <div class="ui calendar date" id="invoice-date">
+                            <div class="ui calendar date" id="invoice-date" data-content="Invoice Date">
                                 <div class="ui input right icon">
                                     <i class="calendar icon"></i>
                                     <input type="text" id="invoice-date-input" placeholder="Invoice Date">
@@ -84,7 +75,7 @@
                         </div>
                         <div class="four wide column"></div>
                         <div class="four wide column">
-                            <div class="ui calendar date" id="payment-due">
+                            <div class="ui calendar date" id="payment-due" data-content="Payment Due">
                                 <div class="ui input right icon">
                                     <i class="calendar icon"></i>
                                     <input type="text" id="payment-due-input" placeholder="Payment Due">
@@ -141,28 +132,104 @@
                             </div>
                         </div>
                     </div>
-                    <div class="inline fields">
-                        <div class="ui search" id="market-search">
-                            <div class="ui icon input">
-                                <input class="prompt rounded" id="market-search-input" type="text" placeholder="Market">
-                                <i class="search icon"></i>
-                            </div>
-                            <div class="results"></div>
-                        </div>
-                    </div>
-                    <div class="inline fields">
-                        <div class="ui period">
-                            <div class="ui input right icon">
-                                <i class="calendar icon"></i>
-                                <input type="text" id="allocation-period-input" placeholder="Allocation Period" />
+                    <div id="simple-allocation-panel">
+                        <div class="inline fields">
+                            <div class="ui search market-search">
+                                <div class="ui icon input">
+                                    <input class="prompt rounded" id="market-search-input" type="text" placeholder="Market">
+                                    <i class="search icon"></i>
+                                </div>
+                                <div class="results"></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="inline fields">
-                        <div class="ui checkbox">
-                            <input type="checkbox" name="example"/>
-                            <label>I need more complex Allocation options</label>
+                        <div class="inline fields">
+                            <div class="ui period">
+                                <div class="ui input right icon">
+                                    <i class="calendar icon"></i>
+                                    <input type="text" class="allocation-period-input" placeholder="Allocation Period" />
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div id="complex-allocation-panel">
+                    <div class="ui grid allocation-row">
+                        <div class="four wide column">
+                            <div class="ui search market-search">
+                                <div class="ui icon input">
+                                    <input class="prompt rounded complex-market-search-input" type="text" placeholder="Market">
+                                    <i class="search icon"></i>
+                                </div>
+                                <div class="results"></div>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <div class="ui period">
+                                <div class="ui input right icon">
+                                    <i class="calendar icon"></i>
+                                    <input type="text" class="allocation-period-input" placeholder="Allocation Period" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <div class="ui right labeled input">
+                                <div class="ui dropdown label allocation-currency-units-dropdown">
+                                    <div class="text currency-unit">KOW</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <div class="item">KOW</div>
+                                        <div class="item">AUD</div>
+                                        <div class="item">USD</div>
+                                        <div class="item">EUR</div>
+                                        <div class="item">GBP</div>
+                                        <div class="item">THB</div>
+                                        <div class="item">TWD</div>
+                                        <div class="item">SAR</div>
+                                    </div>
+                                </div>
+                                <input type="text" class="one-allocation-amount" />
+                                <div class="ui basic label">.00</div>
+                            </div>
+                        </div>
+                        <div class="four wide column text-center">
+                            <div class="ui icon button add-row-btn">
+                                <i class="icon add square"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid" id="total-value-panel">
+                        <div class="eight wide column font-helvetica text-right" style="font-size: 2em;">
+                            <span style="vertical-align: -webkit-baseline-middle;">Total</span>
+                        </div>
+                        <div class="four wide column">
+                            <div class="ui right labeled input">
+                                <div class="ui dropdown label" id="allocation-currency-units-dropdown">
+                                    <div class="text currency-unit" id="allocation-currency-unit">KOW</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu currency-unit-menu">
+                                        <div class="item">KOW</div>
+                                        <div class="item">AUD</div>
+                                        <div class="item">USD</div>
+                                        <div class="item">EUR</div>
+                                        <div class="item">GBP</div>
+                                        <div class="item">THB</div>
+                                        <div class="item">TWD</div>
+                                        <div class="item">SAR</div>
+                                    </div>
+                                </div>
+                                <input type="text" id="total-allocation-amount" readonly/>
+                                <div class="ui basic label">.00</div>
+                            </div>
+                        </div>
+                        <div class="four wide column text-center">
+                            <i class="icon checkmark box green" id="allocation-confirm-btn" style="font-size: 2em;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="simple-allocation-check"/>
+                        <label>I need more complex Allocation options</label>
                     </div>
                 </div>
             </div>
@@ -208,8 +275,7 @@
                     <input type="file" id="file-input"/>
                 </div>
                 <div class="field">
-                    <label>Comment</label>
-                    <textarea rows="3"></textarea>
+                    <textarea rows="3" placeholder="Comments"></textarea>
                 </div>
             </div>
         </div>
@@ -276,11 +342,6 @@
 <script type="text/javascript" src="assets/js/lib/moment.min.js"></script>
 <script type="text/javascript" src="assets/js/lib/daterangepicker.min.js"></script>
 <script type="text/javascript" src="assets/js/lib/calendar.min.js"></script>
-<!--<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>-->
-<!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/ripples.min.js"></script>-->
-<!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/js/material.min.js"></script>-->
-<!--<script type="text/javascript" src="//momentjs.com/downloads/moment-with-locales.min.js"></script>-->
-<!--<script type="text/javascript" src="assets/js/lib/bootstrap-material-datetimepicker.js"></script>-->
 <script type="text/javascript" src="assets/js/app/app.js"></script>
 </body>
 </html>
