@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>HandsonTable Datasheet</title>
     <link rel="stylesheet" href="assets/css/lib/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="assets/css/lib/jquery.fs.dropper.css"/>
     <link rel="stylesheet" href="assets/css/app/index.css"/>
 </head>
 <body>
@@ -11,6 +12,20 @@
 <div id="main-container">
     <div id="buttons">
         <button class="normal-btn" id="plus-button">+</button>
+    </div>
+    <div id="dropzones">
+        <div class="dropzone">
+            <div class="button">
+                <img src="assets/img/drop-file-here.png"/>
+            </div>
+            <div class="upload-check">&#10004;</div>
+        </div>
+        <div class="dropzone">
+            <div class="button">
+                <img src="assets/img/drop-file-here.png"/>
+            </div>
+            <div class="upload-check">&#10004;</div>
+        </div>
     </div>
 </div>
 
@@ -30,13 +45,14 @@
         </div>
         <div class="dialog-footer">
             <button id="save-confirm" class="confirm">Confirm</button>
-            <button class="dialog-close" dismiss="#save">Close</button>
+            <button class="dialog-close" dismiss="#change-name">Close</button>
         </div>
     </div>
 </div>
 
 <script type="text/javascript" src="assets/js/lib/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="assets/js/lib/jquery-ui.min.js"></script>
+<script type="text/javascript" src="assets/js/lib/jquery.fs.dropper.js"></script>
 <script type="text/javascript" src="assets/js/lib/jquery.ui-contextmenu.min.js"></script>
 <script type="text/javascript" src="assets/js/app/index.js"></script>
 </body>
