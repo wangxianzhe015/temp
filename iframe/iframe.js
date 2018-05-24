@@ -12,7 +12,7 @@ var settings = {
     dropdownMenu: true,
     //collapsibleColumns: true,
     hiddenColumns: true,
-    contextMenu: true,
+    //contextMenu: true,
     manualRowResize: true,
     manualColumnResize: true,
     contextMenuCopyPaste: true,
@@ -24,7 +24,32 @@ var settings = {
     autoRowSize: {syncLimit: 300},
     width: 1000,
     height: window.innerHeight - 214,
-    licenseKey: "63ae9-00dfe-0b600-f450d-35624"
+    licenseKey: "63ae9-00dfe-0b600-f450d-35624",
+    afterSelection: function (row, col, row2, col2) {
+        //var meta = this.getCellMeta(row2, col2);
+        //
+        //if (meta.readOnly) {
+        //    this.updateSettings({fillHandle: false});
+        //}
+        //else {
+        //    this.updateSettings({fillHandle: true});
+        //}
+    },
+    cells: function (row, col, prop) {
+        var cellProperties = {};
+
+        //if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
+        //    cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
+        //}
+        if (row === 0) {
+            cellProperties.renderer = firstRowRenderer; // uses function directly
+        }
+        else {
+            cellProperties.renderer = "negativeValueRenderer"; // uses lookup map
+        }
+
+        return cellProperties;
+    }
 };
 
 $(document).ready(function(){
@@ -35,6 +60,9 @@ $(document).ready(function(){
         console.log(queryResult);
         hot.render();
     });
+
+    // maps function to lookup string
+    Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
 
     $(document).on({
         keyup: function(){
@@ -157,4 +185,27 @@ function generateData(rows, cols){
         res.push(row);
     }
     return res;
+}
+
+function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
+    Handsontable.renderers.TextRenderer.apply(this, arguments);
+    td.style.fontWeight = 'bold';
+    td.style.color = 'green';
+    td.style.background = '#CEC';
+}
+
+function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
+    Handsontable.renderers.TextRenderer.apply(this, arguments);
+
+    // if row contains negative number
+    if (parseInt(value, 10) < 0) {
+        // add class "negative"
+        td.className = 'make-me-red';
+    }
+
+    if (!value || value === '') {
+        td.style.background = 'rgba(0,0,0,0.3)';
+    } else {
+        td.style.background = '';
+    }
 }
