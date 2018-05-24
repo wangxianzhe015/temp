@@ -12,7 +12,21 @@ $(document).ready(function(){
         success: function(res){
             var files = $.parseJSON(res);
             for (var i = 0; i < files.length; i ++){
-                addButton(files[i]);
+                addAppButton(files[i]);
+            }
+        }
+    });
+
+    $.ajax({
+        url: "process.php",
+        type: "POST",
+        data: {
+            "action": "get-all-tags"
+        },
+        success: function(res){
+            var files = $.parseJSON(res);
+            for (var i = 0; i < files.length; i ++){
+                addTagButton(files[i]);
             }
         }
     });
@@ -50,7 +64,11 @@ $(document).ready(function(){
     },false);
 
     $("#plus-button").on("click", function(){
-        loadIframe();
+        loadIframe("app");
+    });
+
+    $("#plus-tag-button").on("click", function(){
+        loadIframe("tag");
     });
 
     $(".dialog-close").on("click", function(){
@@ -61,6 +79,11 @@ $(document).ready(function(){
     $("#save-confirm").on("click", function(){
         var newName = $("#save-file-name").val().trim();
         var oldName;
+
+        if (!/^[a-zA-Z]+$/.test(newName)){
+            $(".dialog-message").show();
+            return;
+        }
 
         if ($targetButton.data("renamed")){
             oldName = $targetButton.text() + "--" + $targetButton.data("time");
@@ -74,7 +97,8 @@ $(document).ready(function(){
             data: {
                 action: "rename-app",
                 oldName: oldName,
-                newName: newName + "--" + $targetButton.data("time")
+                newName: newName + "--" + $targetButton.data("time"),
+                type: $targetButton.data("type")
             },
             success: function(){
                 $targetButton.text(newName).data("renamed", true);
@@ -82,6 +106,14 @@ $(document).ready(function(){
                 $("#save-file-name").val("");
             }
         });
+    });
+
+    $("#save-file-name").on("keyup", function(){
+        if (!/^[a-zA-Z]+$/.test($(this).val())){
+            $(".dialog-message").show();
+        } else {
+            $(".dialog-message").hide();
+        }
     });
 
     $(document).contextmenu({
@@ -94,7 +126,7 @@ $(document).ready(function(){
             //]}
         ],
         beforeOpen: function(event, ui){
-            if ($(ui.target).hasClass("app-btn")){
+            if ($(ui.target).hasClass("app-btn") || $(ui.target).hasClass("tag-btn")){
                 $targetButton = $(ui.target);
             } else {
                 return false;
@@ -112,15 +144,16 @@ $(document).ready(function(){
     });
 });
 
-function addButton(name){
+function addAppButton(name){
     var text = name.split("--")[0].trim();
 
     $("<button></button>", {
-        text: text==""?timeConverter(name.split("--")[1]):text,
+        text: text==""?dateTimeConverter(name.split("--")[1]):text,
         class: "normal-btn app-btn"
     }).data({
         time: name.split("--")[1],
-        renamed: text!=""
+        renamed: text!="",
+        type: "app"
     }).on({
         click: function(){
             var name;
@@ -129,12 +162,35 @@ function addButton(name){
             } else {
                 name = "--" + $(this).data("time");
             }
-            loadIframe(name, $(this).text());
+            loadIframe("app", name, $(this).text());
         }
-    }).appendTo("#buttons");
+    }).appendTo("#app-buttons");
 }
 
-function loadIframe(name, text){
+function addTagButton(name){
+    var text = name.split("--")[0].trim();
+
+    $("<button></button>", {
+        text: text==""?"Tag " + timeConverter(name.split("--")[1]):text,
+        class: "normal-btn tag-btn"
+    }).data({
+        time: name.split("--")[1],
+        renamed: text!="",
+        type: "tag"
+    }).on({
+        click: function(){
+            var name;
+            if ($(this).data("renamed")){
+                name = $(this).text() + "--" + $(this).data("time");
+            } else {
+                name = "--" + $(this).data("time");
+            }
+            loadIframe("tag", name, $(this).text());
+        }
+    }).appendTo("#tag-buttons");
+}
+
+function loadIframe(type, name, text){
     if (name == undefined){
         name = "";
     }
@@ -142,7 +198,7 @@ function loadIframe(name, text){
     var iframeContainer = $("#iframe-container"), iframe = iframeContainer.find("iframe"), frameWin = iframe[0].contentWindow;
     iframe.attr("src", window.location.href + "/iframe/").off("load").on({
         load: function(){
-            frameWin.postMessage({action: 'app-name', name: name, text: text}, '*');
+            frameWin.postMessage({action: 'open', name: name, text: text, type: type}, '*');
         }
     });
 
@@ -151,20 +207,36 @@ function loadIframe(name, text){
 
 function parentMessageHandler(message){
     var action = message.data.action;
-    switch (action){
-        case "close-iframe":
-            $("#iframe-container").fadeOut();
-            if (!message.data.isChanged){
+    var type = message.data.type;
+
+    if (type == "app") {
+        switch (action) {
+            case "close-iframe":
+                $("#iframe-container").fadeOut();
+                if (!message.data.isChanged) {
+                    break;
+                }
+                if (message.data.isNew) {
+                    addAppButton("--" + message.data.time);
+                }
                 break;
-            }
-            if (message.data.isNew) {
-                addButton("--" + message.data.time);
-            }
-            break;
+        }
+    } else if (type == "tag") {
+        switch (action){
+            case "close-iframe":
+                $("#iframe-container").fadeOut();
+                if (!message.data.isChanged) {
+                    break;
+                }
+                if (message.data.isNew) {
+                    addTagButton("--" + message.data.time);
+                }
+                break;
+        }
     }
 }
 
-function timeConverter(UNIX_timestamp){
+function dateTimeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     //var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
@@ -180,4 +252,16 @@ function timeConverter(UNIX_timestamp){
     var sec = a.getSeconds().toString();
     sec = sec.length == 1? "0" + sec: sec;
     return year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
+}
+
+function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp * 1000);
+
+    var hour = a.getHours().toString();
+    hour = hour.length == 1? "0" + hour: hour;
+    var min = a.getMinutes().toString();
+    min = min.length == 1? "0" + min: min;
+    var sec = a.getSeconds().toString();
+    sec = sec.length == 1? "0" + sec: sec;
+    return hour + min + sec ;
 }

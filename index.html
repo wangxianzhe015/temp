@@ -11,7 +11,12 @@
 
 <div id="main-container">
     <div id="buttons">
-        <button class="normal-btn" id="plus-button">+</button>
+        <div id="app-buttons">
+            <button class="normal-btn" id="plus-button">+</button>
+        </div>
+        <div id="tag-buttons">
+            <button class="normal-btn" id="plus-tag-button">+ Tag</button>
+        </div>
     </div>
     <div id="dropzones">
         <div class="dropzone">
@@ -41,6 +46,9 @@
                 <label class="form-control" for="save-file-name">New Name: </label>
                 <input class="form-control" type="text" id="save-file-name" placeholder="<Type>..."/>
                 <input type="hidden" id="save-target"/>
+            </div>
+            <div class="dialog-message">
+                Name must contain only alphabets.
             </div>
         </div>
         <div class="dialog-footer">

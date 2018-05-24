@@ -1,18 +1,18 @@
 window.addEventListener("message", messageHandler, false);
+// maps function to lookup string
+Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
+
 var isActive = true;
 var isNew = true;
 var changed = false;
 var hot;
-var settings = {
+var basicSettings = {
     minRows: 1,
     minCols: 1,
     rowHeaders: false,
     colHeaders: false,
-    filters: true,
-    dropdownMenu: true,
-    //collapsibleColumns: true,
     hiddenColumns: true,
-    //contextMenu: true,
+    contextMenu: true,
     manualRowResize: true,
     manualColumnResize: true,
     contextMenuCopyPaste: true,
@@ -24,7 +24,16 @@ var settings = {
     autoRowSize: {syncLimit: 300},
     width: 1000,
     height: window.innerHeight - 214,
-    licenseKey: "63ae9-00dfe-0b600-f450d-35624",
+    licenseKey: "63ae9-00dfe-0b600-f450d-35624"
+};
+var tagSettings = {
+    filters: false,
+    dropdownMenu: false
+};
+var appSettings = {
+    filters: true,
+    dropdownMenu: true,
+    //collapsibleColumns: true,
     afterSelection: function (row, col, row2, col2) {
         //var meta = this.getCellMeta(row2, col2);
         //
@@ -61,9 +70,6 @@ $(document).ready(function(){
         hot.render();
     });
 
-    // maps function to lookup string
-    Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
-
     $(document).on({
         keyup: function(){
             changed = true;
@@ -86,11 +92,11 @@ $(document).ready(function(){
     });
 
     $('#toggle-header').on('click', function(e){
-        settings.colHeaders = !settings.colHeaders;
-        settings.rowHeaders = !settings.rowHeaders;
+        appSettings.colHeaders = !appSettings.colHeaders;
+        appSettings.rowHeaders = !appSettings.rowHeaders;
         hot.updateSettings({
-            "colHeaders": settings.colHeaders,
-            "rowHeaders": settings.rowHeaders
+            "colHeaders": appSettings.colHeaders,
+            "rowHeaders": appSettings.rowHeaders
         });
         hot.render();
     });
@@ -102,8 +108,15 @@ $(document).ready(function(){
     });
 
     $("#close-btn").on("click", function(){
+        var $container = $("#table-container");
+        var type = $container.data("type");
+
+        if (type == "tag"){
+            $('#export-csv').click();
+        }
+
         if (!changed) {
-            parent.window.postMessage({action: "close-iframe", isChanged: changed}, '*');
+            parent.window.postMessage({action: "close-iframe", isChanged: changed, type: type}, '*');
             return;
         }
         if (isNew) {
@@ -114,11 +127,13 @@ $(document).ready(function(){
                 type: "POST",
                 data: {
                     action: "save-app",
-                    name: $("#table-container").data("name"),
+                    name: $container.data("name"),
+                    type: type,
                     data: JSON.stringify(hot.getData())
                 },
                 success: function (res) {
-                    parent.window.postMessage({action: "close-iframe", isChanged: changed, isNew: isNew, time: res}, '*');
+                    var type = $("#table-container").data("type");
+                    parent.window.postMessage({action: "close-iframe", isChanged: changed, isNew: isNew, time: res, type: type}, '*');
                 }
             });
         }
@@ -129,14 +144,23 @@ $(document).ready(function(){
 
 function messageHandler(message){
     var action = message.data.action;
+    var type = message.data.type;
 
-    switch (action){
-        case "app-name":
+    switch (action) {
+        case "open":
             var name = message.data.name;
             var text = message.data.text;
-            if (name == ""){
+            if (name == "") {
+                var settings;
                 isNew = true;
-                hot = new Handsontable(document.getElementById("table-container"), $.extend(settings, {data: generateData(100, 10)}) );
+                if (type == "tag"){
+                    settings = $.extend(basicSettings, tagSettings, {data: generateData(100, 1)});
+                    $("#external-btns").hide();
+                } else if (type == "app") {
+                    settings = $.extend(basicSettings, appSettings, {data: generateData(100, 10)});
+                }
+                hot = new Handsontable(document.getElementById("table-container"), settings);
+                $("#table-container").data("type", type);
             } else {
                 isNew = false;
                 $.ajax({
@@ -144,13 +168,22 @@ function messageHandler(message){
                     type: "POST",
                     data: {
                         action: "get-app",
-                        name: name
+                        name: name,
+                        type: type
                     },
                     success: function (res) {
-                        hot = new Handsontable(document.getElementById("table-container"), $.extend(settings, {data: $.parseJSON(res)}));
+                        var settings;
+                        if (type == "tag"){
+                            settings = $.extend(basicSettings, tagSettings, {data: $.parseJSON(res)});
+                            $("#external-btns").hide();
+                        } else if (type == "app") {
+                            settings = $.extend(basicSettings, appSettings, {data: $.parseJSON(res)});
+                        }
+                        hot = new Handsontable(document.getElementById("table-container"), settings);
                         $("#table-container").data({
                             "name": name,
-                            "text": text
+                            "text": text,
+                            "type": type
                         });
                     }
                 });
@@ -166,10 +199,11 @@ function saveApp(){
             type: "POST",
             data: {
                 action: "save-app",
-                data: JSON.stringify(hot.getData())
+                data: JSON.stringify(hot.getData()),
+                type: $("#table-container").data("type")
             },
             success: function (res) {
-                parent.window.postMessage({action: "close-iframe", isChanged: changed, isNew: isNew, time: res}, '*');
+                parent.window.postMessage({action: "close-iframe", isChanged: changed, isNew: isNew, time: res, type: $("#table-container").data("type")}, '*');
             }
         });
     }

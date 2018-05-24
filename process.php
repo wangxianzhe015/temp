@@ -10,6 +10,9 @@ switch ($action){
     case "get-all-apps":
         getAllApps();
         break;
+    case "get-all-tags":
+        getAllTags();
+        break;
     case "get-app":
         getApp();
         break;
@@ -76,6 +79,21 @@ function getAllApps(){
     $files = scandir($path);
     $res = [];
     foreach ($files as $f) {
+        if ($f != "." && $f != ".." && $f != ".gitignore" && $f != "tag"){
+            array_push($res, $f);
+        }
+    }
+
+    sort($res);
+
+    echo json_encode($res);
+}
+
+function getAllTags(){
+    $path = "./data/tag/";
+    $files = scandir($path);
+    $res = [];
+    foreach ($files as $f) {
         if ($f != "." && $f != ".." && $f != ".gitignore"){
             array_push($res, $f);
         }
@@ -88,10 +106,17 @@ function getAllApps(){
 
 function getApp(){
     $name = $_POST['name'];
+    $type = $_POST['type'];
 
-    $myFile = fopen("./data/" . $name, "r") or die("Unable to open file!");
+    if ($type == "app"){
+        $path = "./data/";
+    } else {
+        $path = "./data/tag/";
+    }
+
+    $myFile = fopen($path . $name, "r") or die("Unable to open file!");
     if ($myFile) {
-        $content = fread($myFile, filesize("./data/" . $name));
+        $content = fread($myFile, filesize($path . $name));
         fclose($myFile);
         echo $content;
     } else {
@@ -101,6 +126,7 @@ function getApp(){
 
 function saveApp(){
     $data = $_POST['data'];
+    $type = $_POST['type'];
     $time = time();
 
     if (isset($_POST['name'])){
@@ -109,7 +135,13 @@ function saveApp(){
         $fileName = "--" . $time;
     }
 
-    $myFile = fopen("./data/" . $fileName, "wr") or die("fail");
+    if ($type == "app"){
+        $path = "./data/" . $fileName;
+    } else {
+        $path = "./data/tag/" . $fileName;
+    }
+
+    $myFile = fopen($path, "wr") or die("fail");
     fwrite($myFile, $data);
     fclose($myFile);
 
@@ -120,6 +152,13 @@ function saveApp(){
 function renameApp(){
     $oldName = $_POST['oldName'];
     $newName = $_POST['newName'];
+    $type = $_POST['type'];
 
-    rename("./data/" . $oldName, "./data/" . $newName);
+    if ($type == "app"){
+        $path = "./data/";
+    } else {
+        $path = "./data/tag/";
+    }
+
+    rename($path . $oldName, $path . $newName);
 }

@@ -12,12 +12,12 @@ body, html {
     font-family: Roboto,Helvetica,Arial,sans-serif;
     font-weight: 400;
     color: #363636;
+    overflow: hidden;
 }
 body{
     margin: 0;
     width: 100%;
-    background-color: transparent;
-    overflow: hidden;
+    background-color: #ffffff;
 }
 #search-panel{
     width: var(--base-width);
@@ -25,6 +25,7 @@ body{
 }
 #table-container{
     margin: 30px auto;
+    border: solid 1px gray;
 }
 #external-btns{
     width: var(--base-width);
