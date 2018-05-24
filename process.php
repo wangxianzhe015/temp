@@ -22,6 +22,9 @@ switch ($action){
     case "rename-app":
         renameApp();
         break;
+    case "save-json":
+        saveJSON();
+        break;
     default:
         break;
 }
@@ -161,4 +164,15 @@ function renameApp(){
     }
 
     rename($path . $oldName, $path . $newName);
+}
+
+function saveJSON(){
+    $data = $_POST['data'];
+    $time = time();
+
+    $myFile = fopen("./jsonviewer/data/" . $time, "wr") or die("fail");
+    fwrite($myFile, $data);
+    fclose($myFile);
+
+    echo $time;
 }

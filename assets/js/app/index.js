@@ -116,6 +116,30 @@ $(document).ready(function(){
         }
     });
 
+    $("#show-json-frame").on("click", function(){
+        var $obj = $("#json-frame");
+        $obj.find("iframe").attr("src", window.location.href + "/jsonviewer");
+        $obj.show();
+    });
+
+    $("#json-save-btn").on("click", function(){
+        var data = $("#json-frame").find("iframe")[0].contentWindow.myData;
+        if (data == "") return;
+        $.ajax({
+            url: "process.php",
+            type: "POST",
+            data: {
+                action: "save-json",
+                data: data
+            },
+            success: function(){
+                var $obj = $("#json-frame");
+                $obj.find("iframe").attr("src", "");
+                $obj.hide();
+            }
+        });
+    });
+
     $(document).contextmenu({
         menu: [
             {title: "Rename", cmd: "rename", uiIcon: "ui-icon-copy"}
