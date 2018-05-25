@@ -100,6 +100,7 @@ textarea.form-control[readonly]{
     width: 100%;
     height: 100%;
     display: none;
+    z-index: 10;
 }
 #iframe-container iframe{
     width: 100%;
