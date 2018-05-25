@@ -93,6 +93,19 @@ textarea.form-control[readonly]{
 #main-container #buttons > div{
     display: inline-table;
 }
+#alert{
+    background-color: rgba(0, 173, 244, 0.8);
+    color: white;
+    position: absolute;
+    width: 200px;
+    padding: 1em;
+    margin: 10px;
+    right: 0;
+    top: -200px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.5s;
+}
 #iframe-container{
     position: fixed;
     left: 0;
@@ -125,10 +138,10 @@ textarea.form-control[readonly]{
     top: 100px;
 }
 .dropzone{
-    width: 15vw;
-    height: 15vw;
-    min-width: 200px;
-    min-height: 200px;
+    width: 25vw;
+    height: 21vw;
+    min-width: 300px;
+    min-height: 250px;
     margin: 10px 0;
 }
 .dropzone:first-child{
@@ -194,6 +207,18 @@ textarea.form-control[readonly]{
     position: absolute;
     top: 0;
     right: 0;
+    width: 50px;
+    margin: 1em;
+    background: white;
+    border: solid 1px gray;
+    cursor: pointer;
+    padding: 5px;
+}
+#json-frame #json-close-btn{
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 50px;
     margin: 1em;
     background: white;
     border: solid 1px gray;

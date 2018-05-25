@@ -116,6 +116,10 @@ $(document).ready(function(){
         }
     });
 
+    $("#alert").on("click", function(){
+        setTimeout(hideAlert, 300);
+    });
+
     $("#show-json-frame").on("click", function(){
         var $obj = $("#json-frame");
         $obj.find("iframe").attr("src", window.location.href + "/jsonviewer");
@@ -136,8 +140,15 @@ $(document).ready(function(){
                 var $obj = $("#json-frame");
                 $obj.find("iframe").attr("src", "");
                 $obj.hide();
+                showAlert("JSON file saved successfully.");
             }
         });
+    });
+
+    $("#json-close-btn").on("click", function(){
+        var $obj = $("#json-frame");
+        $obj.find("iframe").attr("src", "");
+        $obj.hide();
     });
 
     $(document).contextmenu({
