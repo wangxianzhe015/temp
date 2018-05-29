@@ -5,6 +5,8 @@ var isActive = true;
 var isNew = true;
 var changed = false;
 var hot;
+var clipboardCache = '';
+const sheetclip = new SheetClip();
 
 var basicSettings = {
     minRows: 1,
@@ -22,13 +24,22 @@ var basicSettings = {
     stretchH: 'all',
     autoColumnSize: {useHeaders: true},
     autoRowSize: {syncLimit: 300},
-    width: 1000,
     height: window.innerHeight - 214,
+    afterCopy: function(changes){
+        clipboardCache = sheetclip.stringify(changes);
+    },
+    afterCut: function(changes){
+        clipboardCache = sheetclip.stringify(changes);
+    },
+    afterPaste: function(changes){
+        clipboardCache = sheetclip.stringify(changes);
+    },
     licenseKey: "63ae9-00dfe-0b600-f450d-35624"
 };
 var tagSettings = {
     filters: false,
     dropdownMenu: false,
+    width: window.innerWidth * 0.3,
     contextMenu: ["row_above", "row_below", "---------", "undo", "redo", "---------", "make_read_only", "---------", "alignment"]
 };
 var appSettings = {
@@ -36,6 +47,7 @@ var appSettings = {
     dropdownMenu: true,
     contextMenu: true,
     mergeCells: true,
+    width: 1000,
     afterSelection: function (row, col, row2, col2) {
         //var meta = this.getCellMeta(row2, col2);
         //
@@ -205,6 +217,18 @@ function messageHandler(message){
                                         callback: setCellColor
                                     }]
                                 }
+                            },
+                            'paste': {
+                                name: 'Paste',
+                                disabled: function(){
+                                    return clipboardCache.length === 0;
+                                },
+                                callback: function(){
+                                    var plugin = this.getPlugin('copyPaste');
+
+                                    this.listen();
+                                    plugin.paste(clipboardCache);
+                                }
                             }
                         })
                     }
@@ -256,6 +280,18 @@ function messageHandler(message){
                                                 name: 'White',
                                                 callback: setCellColor
                                             }]
+                                        }
+                                    },
+                                    'paste': {
+                                        name: 'Paste',
+                                        disabled: function(){
+                                            return clipboardCache.length === 0;
+                                        },
+                                        callback: function(){
+                                            var plugin = this.getPlugin('copyPaste');
+
+                                            this.listen();
+                                            plugin.paste(clipboardCache);
                                         }
                                     }
                                 })
