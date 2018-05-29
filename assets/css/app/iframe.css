@@ -86,6 +86,16 @@ button, input, optgroup, select, textarea {
     -webkit-transform: translateY(-2px);
     transform: translateY(-2px);
 }
+.color-black{
+    background-color: #000000!important;
+    color: white!important;
+}
+.color-white{
+    background-color: #ffffff!important;
+}
+.color-red{
+    background-color: red!important;
+}
 #close-btn{
     position: fixed;
     right: 0;
@@ -109,4 +119,7 @@ button, input, optgroup, select, textarea {
 }
 .make-me-red{
     color: red;
+}
+.empty{
+    background-color: rgba(0,0,0,0.3);
 }

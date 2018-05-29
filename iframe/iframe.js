@@ -1,23 +1,23 @@
 window.addEventListener("message", messageHandler, false);
 // maps function to lookup string
-Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
 
 var isActive = true;
 var isNew = true;
 var changed = false;
 var hot;
+
 var basicSettings = {
     minRows: 1,
     minCols: 1,
     rowHeaders: false,
     colHeaders: false,
     hiddenColumns: true,
-    contextMenu: true,
     manualRowResize: true,
     manualColumnResize: true,
-    contextMenuCopyPaste: true,
+    contextMenuCopyPaste: {
+        swfPath: '/assets/swf/ZeroClipboard.swf'
+    },
     copyPaste: true,
-    mergeCells: true,
     search: true,
     stretchH: 'all',
     autoColumnSize: {useHeaders: true},
@@ -28,12 +28,14 @@ var basicSettings = {
 };
 var tagSettings = {
     filters: false,
-    dropdownMenu: false
+    dropdownMenu: false,
+    contextMenu: ["row_above", "row_below", "---------", "undo", "redo", "---------", "make_read_only", "---------", "alignment"]
 };
 var appSettings = {
     filters: true,
     dropdownMenu: true,
-    //collapsibleColumns: true,
+    contextMenu: true,
+    mergeCells: true,
     afterSelection: function (row, col, row2, col2) {
         //var meta = this.getCellMeta(row2, col2);
         //
@@ -52,8 +54,7 @@ var appSettings = {
         //}
         if (row === 0) {
             cellProperties.renderer = firstRowRenderer; // uses function directly
-        }
-        else {
+        } else {
             cellProperties.renderer = "negativeValueRenderer"; // uses lookup map
         }
 
@@ -69,6 +70,22 @@ $(document).ready(function(){
         console.log(queryResult);
         hot.render();
     });
+
+    Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer);
+    Handsontable.hooks.add('beforeRenderer', function(td, r, c, p, pv, cp){
+        if (cp.color) {
+            switch (cp.color) {
+                case "white":
+                    td.style.backgroundColor = cp.color;
+                    td.style.color = "black";
+                    break;
+                default :
+                    td.style.backgroundColor = cp.color;
+                    td.style.color = "white";
+                    break;
+            }
+        }
+    }, hot);
 
     $(document).on({
         keyup: function(){
@@ -160,6 +177,38 @@ function messageHandler(message){
                     settings = $.extend(basicSettings, appSettings, {data: generateData(100, 10)});
                 }
                 hot = new Handsontable(document.getElementById("table-container"), settings);
+                var cm = hot.getPlugin('ContextMenu');
+                hot.updateSettings({
+                    contextMenu: {
+                        // Clone the pre-defined items and add your custom items.
+                        items: Object.assign({}, cm.itemsFactory.predefinedItems, {
+                            'hsep1': '---------',
+                            'set_color': {
+                                key: 'color',
+                                name: 'Color',
+                                submenu: {
+                                    items: [{
+                                        key: 'color:red',
+                                        name: 'Red',
+                                        callback: setCellColor
+                                    }, {
+                                        key: 'color:blue',
+                                        name: 'Blue',
+                                        callback: setCellColor
+                                    }, {
+                                        key: 'color:black',
+                                        name: 'Black',
+                                        callback: setCellColor
+                                    }, {
+                                        key: 'color:white',
+                                        name: 'White',
+                                        callback: setCellColor
+                                    }]
+                                }
+                            }
+                        })
+                    }
+                });
                 $("#table-container").data("type", type);
             } else {
                 isNew = false;
@@ -180,6 +229,39 @@ function messageHandler(message){
                             settings = $.extend(basicSettings, appSettings, {data: $.parseJSON(res)});
                         }
                         hot = new Handsontable(document.getElementById("table-container"), settings);
+                        var cm = hot.getPlugin('ContextMenu');
+                        hot.updateSettings({
+                            contextMenu: {
+                                // Clone the pre-defined items and add your custom items.
+                                items: Object.assign({}, cm.itemsFactory.predefinedItems, {
+                                    'hsep1': '---------',
+                                    'set_color': {
+                                        key: 'color',
+                                        name: 'Color',
+                                        submenu: {
+                                            items: [{
+                                                key: 'color:red',
+                                                name: 'Red',
+                                                callback: setCellColor
+                                            }, {
+                                                key: 'color:blue',
+                                                name: 'Blue',
+                                                callback: setCellColor
+                                            }, {
+                                                key: 'color:black',
+                                                name: 'Black',
+                                                callback: setCellColor
+                                            }, {
+                                                key: 'color:white',
+                                                name: 'White',
+                                                callback: setCellColor
+                                            }]
+                                        }
+                                    }
+                                })
+                            }
+                        });
+
                         $("#table-container").data({
                             "name": name,
                             "text": text,
@@ -229,17 +311,29 @@ function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
 }
 
 function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
+    if (td.className != "") return;
     Handsontable.renderers.TextRenderer.apply(this, arguments);
 
     // if row contains negative number
     if (parseInt(value, 10) < 0) {
         // add class "negative"
-        td.className = 'make-me-red';
+        $(td).addClass('make-me-red');
     }
 
     if (!value || value === '') {
-        td.style.background = 'rgba(0,0,0,0.3)';
+        $(td).addClass("empty");
     } else {
-        td.style.background = '';
+        $(td).removeClass("empty");
+    }
+}
+
+function setCellColor(key, opt) {
+    var color = key.substring(6);
+    for (var i = opt[0].start.row; i <= opt[0].end.row; i++) {
+        for (var j = opt[0].start.col; j <= opt[0].end.col; j++) {
+            this.getCell(i, j).style.backgroundColor = color;
+            this.getCell(i, j).style.color = color=="white"?"black":"white";
+            this.setCellMeta(i, j, 'color', color); // Save the color
+        }
     }
 }
