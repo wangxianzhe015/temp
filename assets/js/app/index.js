@@ -38,17 +38,13 @@ $(document).ready(function(){
 
         },
         "fileComplete.dropper": function(e, file, response){
-            var $obj = $(e.target).find(".upload-check");
-            $obj.fadeIn("fast");
-            setTimeout(function () {
-                $obj.fadeOut();
-            }, 3000);
-        },
-        mouseover: function(){
-            $(this).find(".button").fadeIn("fast");
-        },
-        mouseleave: function(){
-            $(this).find(".button").fadeOut("fast");
+            var $objs = $(e.target).find(".upload-check");
+            $(e.target).append($("<div></div>", {
+                class: "upload-check",
+                html: "&#10004;"
+            }).css({
+                left: $objs.length * 30
+            }));
         }
     }).find(".button").on("click", function(){
         $(this).parent().find(".dropper-dropzone").click();

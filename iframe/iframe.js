@@ -123,9 +123,11 @@ $(document).ready(function(){
     $('#toggle-header').on('click', function(e){
         appSettings.colHeaders = !appSettings.colHeaders;
         appSettings.rowHeaders = !appSettings.rowHeaders;
+        var mergedCells = [].concat(hot.getPlugin("mergeCells").mergedCellsCollection.mergedCells);
         hot.updateSettings({
             "colHeaders": appSettings.colHeaders,
-            "rowHeaders": appSettings.rowHeaders
+            "rowHeaders": appSettings.rowHeaders,
+            mergeCells: mergedCells
         });
         hot.render();
     });
@@ -201,7 +203,7 @@ function messageHandler(message){
                                 submenu: {
                                     items: [{
                                         key: 'color:red',
-                                        name: 'Red',
+                                        name: '<span class="red-hint"></span>Red',
                                         callback: setCellColor
                                     }, {
                                         key: 'color:blue',

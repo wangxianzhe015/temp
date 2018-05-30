@@ -123,3 +123,9 @@ button, input, optgroup, select, textarea {
 .empty{
     background-color: rgba(0,0,0,0.3);
 }
+.red-hint{
+    width: 1em;
+    height: 1em;
+    background-color: red;
+    border: solid 1px gray;
+}
