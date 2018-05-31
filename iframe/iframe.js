@@ -142,32 +142,15 @@ $(document).ready(function(){
         var $container = $("#table-container");
         var type = $container.data("type");
 
-        if (type == "tag"){
-            $('#export-csv').click();
-        }
+        //if (type == "tag"){
+        //    $('#export-csv').click();
+        //}
 
         if (!changed) {
             parent.window.postMessage({action: "close-iframe", isChanged: changed, type: type}, '*');
             return;
         }
-        if (isNew) {
-            saveApp();
-        } else {
-            $.ajax({
-                url: "../process.php",
-                type: "POST",
-                data: {
-                    action: "save-app",
-                    name: $container.data("name"),
-                    type: type,
-                    data: JSON.stringify(hot.getData())
-                },
-                success: function (res) {
-                    var type = $("#table-container").data("type");
-                    parent.window.postMessage({action: "close-iframe", isChanged: changed, isNew: isNew, time: res, type: type}, '*');
-                }
-            });
-        }
+        saveApp();
     });
 
     setInterval(saveApp, 5 * 60000);
@@ -203,7 +186,7 @@ function messageHandler(message){
                                 submenu: {
                                     items: [{
                                         key: 'color:red',
-                                        name: '<span class="red-hint"></span>Red',
+                                        name: 'Red',
                                         callback: setCellColor
                                     }, {
                                         key: 'color:blue',
@@ -247,12 +230,13 @@ function messageHandler(message){
                         type: type
                     },
                     success: function (res) {
+                        var data = $.parseJSON(res);
                         var settings;
                         if (type == "tag"){
-                            settings = $.extend(basicSettings, tagSettings, {data: $.parseJSON(res)});
+                            settings = $.extend(basicSettings, tagSettings, {data: data.data});
                             $("#external-btns").hide();
                         } else if (type == "app") {
-                            settings = $.extend(basicSettings, appSettings, {data: $.parseJSON(res)});
+                            settings = $.extend(basicSettings, appSettings, {data: data.data});
                         }
                         hot = new Handsontable(document.getElementById("table-container"), settings);
                         var cm = hot.getPlugin('ContextMenu');
@@ -297,8 +281,18 @@ function messageHandler(message){
                                         }
                                     }
                                 })
-                            }
+                            },
+                            mergeCells: data.mergedCells
                         });
+
+                        for (var i = 0; i < data.color.length; i ++){
+                            for (var j = 0; j < data.color[i].length; j ++){
+                                if (hot.getCell(i, j)){
+                                    hot.getCell(i, j).style.backgroundColor = data.color[i][j];
+                                    hot.getCell(i, j).style.color = data.color[i][j]=="white"?"black":"white";
+                                }
+                            }
+                        }
 
                         $("#table-container").data({
                             "name": name,
@@ -314,13 +308,29 @@ function messageHandler(message){
 
 function saveApp(){
     if (isActive) {
+        var data = hot.getData(), colorInfo = [];
+        for (var i = 0; i < data.length; i ++){
+            colorInfo[i] = [];
+            for (var j = 0; j < data[i].length; j ++){
+                if (hot.getCell(i, j)) {
+                    colorInfo[i][j] = hot.getCell(i, j).style.backgroundColor;
+                } else {
+                    colorInfo[i][j] = "";
+                }
+            }
+        }
         $.ajax({
             url: "../process.php",
             type: "POST",
             data: {
                 action: "save-app",
-                data: JSON.stringify(hot.getData()),
-                type: $("#table-container").data("type")
+                data: JSON.stringify({
+                    data: data,
+                    color: colorInfo,
+                    mergedCells: hot.getPlugin("mergeCells").mergedCellsCollection.mergedCells
+                }),
+                type: $("#table-container").data("type"),
+                name: isNew?undefined:$("#table-container").data("name")
             },
             success: function (res) {
                 parent.window.postMessage({action: "close-iframe", isChanged: changed, isNew: isNew, time: res, type: $("#table-container").data("type")}, '*');
@@ -354,8 +364,7 @@ function negativeValueRenderer(instance, td, row, col, prop, value, cellProperti
 
     // if row contains negative number
     if (parseInt(value, 10) < 0) {
-        // add class "negative"
-        $(td).addClass('make-me-red');
+        td.style.color = "red";
     }
 
     if (!value || value === '') {

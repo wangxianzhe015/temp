@@ -7,6 +7,13 @@ function hideAlert(){
     $("#alert").html("").css("top", "");
 }
 
+function showConfirmation(msg, action){
+    var $obj = $("#confirmation");
+    $("#confirm-action").val(action);
+    $obj.find(".dialog-content").html(msg);
+    $obj.fadeIn();
+}
+
 function selectText(containerid) {
     if (document.selection) { // IE
         var range = document.body.createTextRange();

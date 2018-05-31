@@ -1,4 +1,5 @@
 var $targetButton;
+var fileUpload = true;
 
 window.addEventListener("message", parentMessageHandler, false);
 
@@ -45,6 +46,7 @@ $(document).ready(function(){
             }).css({
                 left: $objs.length * 30
             }));
+            showConfirmation("The file '" + file.name + "' received and still accept more files.", "accept-more-files");
         }
     }).find(".button").on("click", function(){
         $(this).parent().find(".dropper-dropzone").click();
@@ -65,6 +67,15 @@ $(document).ready(function(){
 
     $("#plus-tag-button").on("click", function(){
         loadIframe("tag");
+    });
+
+    $("#confirm").on("click", function(){
+        var action = $("#confirm-action").val();
+        switch (action){
+            case "accept-more-files":
+                $("#confirmation").fadeOut();
+                break;
+        }
     });
 
     $(".dialog-close").on("click", function(){
