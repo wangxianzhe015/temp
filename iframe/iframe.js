@@ -7,6 +7,7 @@ var changed = false;
 var hot;
 var clipboardCache = '';
 const sheetclip = new SheetClip();
+var colHeaders = true;
 
 var basicSettings = {
     minRows: 1,
@@ -116,6 +117,50 @@ $(document).ready(function(){
         }
     });
 
+    $("#edit-header").on("click", function(){
+        $("#header-input-div").fadeIn();
+    });
+
+    $("#header-cancel").on("click", function(){
+        $("#header-input").val("");
+        $("#header-input-div").fadeOut();
+    });
+
+    $("#header-confirm").on("click", function(){
+        var $input = $("#header-input");
+        colHeaders = $input.val().split("\n");
+        var mergedCells = [].concat(hot.getPlugin("mergeCells").mergedCellsCollection.mergedCells);
+        var data = hot.getData(), colorInfo = [];
+        for (var i = 0; i < data.length; i ++){
+            colorInfo[i] = [];
+            for (var j = 0; j < data[i].length; j ++){
+                if (hot.getCell(i, j) && $(hot.getCell(i, j)).data("color")) {
+                    colorInfo[i][j] = $(hot.getCell(i, j)).data("color");
+                } else {
+                    colorInfo[i][j] = "";
+                }
+            }
+        }
+
+        hot.updateSettings({
+            colHeaders: colHeaders,
+            mergeCells: mergedCells
+        });
+
+        for (i = 0; i < colorInfo.length; i ++){
+            for (j = 0; j < colorInfo[i].length; j ++){
+                if (hot.getCell(i, j) && colorInfo[i][j] != ""){
+                    $(hot.getCell(i, j)).data("color", colorInfo[i][j]).addClass("bg-" + colorInfo[i][j]);
+                    //hot.getCell(i, j).style.backgroundColor = colorInfo[i][j];
+                    //hot.getCell(i, j).style.color = colorInfo[i][j]=="white"?"black":"white";
+                }
+            }
+        }
+
+        $input.val("");
+        $("#header-input-div").fadeOut();
+    });
+
     $('#export-csv').on('click', function(e) {
         hot.getPlugin('exportFile').downloadFile('csv', {filename: $("#table-container").data("text")});
     });
@@ -124,11 +169,34 @@ $(document).ready(function(){
         appSettings.colHeaders = !appSettings.colHeaders;
         appSettings.rowHeaders = !appSettings.rowHeaders;
         var mergedCells = [].concat(hot.getPlugin("mergeCells").mergedCellsCollection.mergedCells);
+        var data = hot.getData(), colorInfo = [];
+        for (var i = 0; i < data.length; i ++){
+            colorInfo[i] = [];
+            for (var j = 0; j < data[i].length; j ++){
+                if (hot.getCell(i, j) && $(hot.getCell(i, j)).data("color")) {
+                    colorInfo[i][j] = $(hot.getCell(i, j)).data("color");
+                } else {
+                    colorInfo[i][j] = "";
+                }
+            }
+        }
+
         hot.updateSettings({
-            "colHeaders": appSettings.colHeaders,
+            "colHeaders": appSettings.colHeaders?colHeaders:false,
             "rowHeaders": appSettings.rowHeaders,
             mergeCells: mergedCells
         });
+
+        for (i = 0; i < colorInfo.length; i ++){
+            for (j = 0; j < colorInfo[i].length; j ++){
+                if (hot.getCell(i, j) && colorInfo[i][j] != ""){
+                    $(hot.getCell(i, j)).data("color", colorInfo[i][j]).addClass("bg-" + colorInfo[i][j]);
+                    //hot.getCell(i, j).style.backgroundColor = colorInfo[i][j];
+                    //hot.getCell(i, j).style.color = colorInfo[i][j]=="white"?"black":"white";
+                }
+            }
+        }
+
         hot.render();
     });
 
@@ -285,11 +353,25 @@ function messageHandler(message){
                             mergeCells: data.mergedCells
                         });
 
+                        var color = "";
                         for (var i = 0; i < data.color.length; i ++){
                             for (var j = 0; j < data.color[i].length; j ++){
                                 if (hot.getCell(i, j)){
-                                    hot.getCell(i, j).style.backgroundColor = data.color[i][j];
-                                    hot.getCell(i, j).style.color = data.color[i][j]=="white"?"black":"white";
+                                    switch (data.color[i][j]){
+                                        case 'red':
+                                            color = "red";
+                                            break;
+                                        case 'black':
+                                            color = "black";
+                                            break;
+                                        case 'blue':
+                                            color = "blue";
+                                            break;
+                                    }
+                                    if (color != ""){
+                                        $(hot.getCell(i, j)).addClass("bg-" + color).data("color", color);
+                                    }
+                                    color = "";
                                 }
                             }
                         }
@@ -312,8 +394,8 @@ function saveApp(){
         for (var i = 0; i < data.length; i ++){
             colorInfo[i] = [];
             for (var j = 0; j < data[i].length; j ++){
-                if (hot.getCell(i, j)) {
-                    colorInfo[i][j] = hot.getCell(i, j).style.backgroundColor;
+                if (hot.getCell(i, j) && $(hot.getCell(i, j)).data("color")) {
+                    colorInfo[i][j] = $(hot.getCell(i, j)).data("color");
                 } else {
                     colorInfo[i][j] = "";
                 }
@@ -359,12 +441,14 @@ function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
 }
 
 function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
-    if (td.className != "") return;
+    if (td.className != "" || td.style.color instanceof String) return;
     Handsontable.renderers.TextRenderer.apply(this, arguments);
 
     // if row contains negative number
     if (parseInt(value, 10) < 0) {
-        td.style.color = "red";
+        if ($(td).data("color") != "red") {
+            td.style.color = "red";
+        }
     }
 
     if (!value || value === '') {
@@ -372,15 +456,27 @@ function negativeValueRenderer(instance, td, row, col, prop, value, cellProperti
     } else {
         $(td).removeClass("empty");
     }
+
+    if ($(td).data("color")) {
+        $(td).addClass("bg-" + $(td).data("color"));
+    }
 }
 
 function setCellColor(key, opt) {
     var color = key.substring(6);
     for (var i = opt[0].start.row; i <= opt[0].end.row; i++) {
         for (var j = opt[0].start.col; j <= opt[0].end.col; j++) {
-            this.getCell(i, j).style.backgroundColor = color;
-            this.getCell(i, j).style.color = color=="white"?"black":"white";
+            if ($(this).data("color")) {
+                $(this).removeClass("bg-" + $(this).data("color"));
+            }
+            if (color != "white") {
+                $(this).addClass("bg-" + color);
+            }
+            $(this).data("color", color);
+            //this.getCell(i, j).style.backgroundColor = color;
+            //this.getCell(i, j).style.color = color=="white"?"black":"white";
             this.setCellMeta(i, j, 'color', color); // Save the color
         }
     }
+    this.render();
 }
